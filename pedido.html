@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="icone.ico" type="image/x-icon">
+  <title>Pedidos - Mekponey</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f8f9fa;
+      padding-bottom: 120px;
+    }
+    .navbar { background-color: #8B0000; }
+    .navbar-brand, .navbar-title { color: white; font-weight: bold; }
+    .pedido-card {
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: white;
+    }
+    .resumo-pix { color: red; font-size: 1.25rem; font-weight: bold; }
+    .rodape-aviso {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #8B0000;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+      z-index: 9999;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar p-3">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html">← Voltar</a>
+    <div class="navbar-title">Seu Pedido</div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div id="lista-pedidos"></div>
+
+  <div class="form-check my-3">
+    <input class="form-check-input" type="checkbox" id="retirarLocal" onchange="atualizarTaxaEntrega()" />
+    <label class="form-check-label" for="retirarLocal">Vou retirar na lanchonete</label>
+  </div>
+
+  <div id="resumo-valor" class="fw-bold fs-5 text-end mb-4"></div>
+
+  <div class="d-flex justify-content-between mt-4">
+    <button class="btn btn-danger" onclick="esvaziarCarrinho()">Esvaziar Carrinho</button>
+    <button class="btn btn-success" onclick="finalizarPedido()" id="btnFinalizarPedido">Finalizar Pedido</button>
+  </div>
+
+  <!-- Formulário de Finalização -->
+  <div id="formulario" class="mt-4" style="display: none">
+    <h5>Dados para Entrega</h5>
+    <form id="form-pedido">
+      <input type="text" class="form-control mb-2" placeholder="Nome" name="nome" required />
+      <input type="text" class="form-control mb-2" placeholder="Endereço com número" name="endereco" required />
+      <input type="text" class="form-control mb-2" placeholder="Ponto de referência" name="referencia" />
+      <input type="text" class="form-control mb-2" placeholder="Bairro" name="bairro" required />
+      <input type="text" class="form-control mb-2" placeholder="WhatsApp" name="whatsapp" required />
+      <input type="text" class="form-control mb-2" placeholder="Melhor horário para entrega" name="horario" />
+      <textarea class="form-control mb-2" placeholder="Observações" name="observacoes"></textarea>
+
+      <label class="mt-3"><strong>Forma de Pagamento</strong></label>
+      <select class="form-select mb-2" id="pagamento" name="pagamento" required onchange="mostrarPagamento()">
+        <option value="">Selecione</option>
+        <option value="pix">Pix</option>
+        <option value="dinheiro">Dinheiro</option>
+        <option value="cartao">Cartão</option>
+      </select>
+
+      <div id="troco" style="display:none">
+        <label>Precisa de troco?</label>
+        <input type="number" class="form-control" placeholder="Troco para quanto?" name="troco" min="0" step="0.01" />
+      </div>
+
+      <div id="cartao" style="display:none">
+        <label>Cartão:</label>
+        <select class="form-select" name="tipoCartao">
+          <option>Crédito</option>
+          <option>Débito</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-3">Confirmar Pedido</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de confirmação do pedido -->
+<div class="modal fade" id="modalConfirmacao" tabindex="-1" aria-labelledby="modalConfirmacaoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalConfirmacaoLabel">Confirme seu Pedido</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <div id="resumoPedido" style="white-space: pre-wrap;"></div>
+        <div id="destaquePix" class="resumo-pix mt-3" style="display: none;">Pagamento via PIX</div>
+        <div id="destaqueHorario" class="mt-2 fw-bold"></div>
+        <div id="totalPedido" class="mt-3 fw-bold"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+        <button type="button" class="btn btn-success" onclick="enviarWhatsApp()">Enviar para WhatsApp</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Combos Especiais -->
+<div class="modal fade" id="modalComboEspecial" tabindex="-1" aria-labelledby="modalComboEspecialLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalComboEspecialLabel">Escolha seus lanches do dia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <p>Veja na categoria especiais do dia qual o sabor de hoje! Para o combo de 2, você tem direito a 1 Coca-Cola de 1 litro ou Guaraná. Digite sua escolha abaixo:</p>
+        <textarea id="detalhesCombo" class="form-control" placeholder="Digite seus lanches e escolha a bebida" rows="4"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" onclick="confirmarComboEspecial()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para editar adicionais -->
+<div class="modal fade" id="modalAdicionais" tabindex="-1" aria-labelledby="modalAdicionaisLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAdicionaisLabel">Acrescentar Adicionais</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-adicionais"></form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="salvarAdicionais()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rodape-aviso">Este pedido deve ser enviado ao WhatsApp</div>
+
+<script>
+let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+let taxaEntrega = 0;
+let itemEditandoIndex = null;
+
+// Lista de adicionais
+const adicionaisDisponiveis = [
+  { nome: "Bacon", preco: 5.00 },
+  { nome: "Cheddar", preco: 5.00 },
+  { nome: "Anéis de Cebola", preco: 5.00 },
+  { nome: "Catupiry Original", preco: 5.00 },
+  { nome: "Mussarela", preco: 5.00 },
+  { nome: "Cream Cheese", preco: 5.00 },
+  { nome: "Hamburger 90 g", preco: 5.00 },
+  { nome: "Hamburger de Picanha", preco: 7.00 },
+  { nome: "Hamburger de Angus", preco: 7.00 }
+];
+
+function atualizarTaxaEntrega(atualizarResumo = true) {
+  const retirar = document.getElementById("retirarLocal").checked;
+  const hora = new Date().getHours();
+  taxaEntrega = retirar ? 0 : (hora >= 7 && hora < 17 ? 4 : 4);
+  if (atualizarResumo) renderizarPedidos();
+}
+
+function precoParaNumero(precoStr) {
+  return parseFloat(precoStr.replace(/[^\d,\.]/g, "").replace(",", ".")) || 0;
+}
+
+function renderizarPedidos() {
+  carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+  const lista = document.getElementById("lista-pedidos");
+  lista.innerHTML = "";
+  let total = 0;
+
+  carrinho.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "pedido-card";
+
+    card.innerHTML = `
+      <div class="d-flex justify-content-between align-items-start">
+        <div>
+          <strong>Item ${index + 1}</strong><br>
+          ${Object.entries(item).map(([k, v]) => `${k}: ${typeof v === 'object' ? JSON.stringify(v) : v}`).join("<br>")}
+        </div>
+        <div class="text-end">
+          <button class="btn btn-sm btn-outline-primary mt-1 me-1" onclick="editarItem(${index})"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-sm btn-outline-danger mt-1" onclick="removerItem(${index})"><i class="bi bi-trash"></i></button>
+        </div>
+      </div>
+    `;
+
+    lista.appendChild(card);
+    total += precoParaNumero(item.preco);
+  });
+
+  const totalComTaxa = total + taxaEntrega;
+  document.getElementById("resumo-valor").textContent = `Total: R$ ${totalComTaxa.toFixed(2).replace(".", ",")}`;
+}
+
+function editarItem(index) {
+  itemEditandoIndex = index;
+  const item = carrinho[index];
+  const form = document.getElementById("form-adicionais");
+  form.innerHTML = "";
+
+  adicionaisDisponiveis.forEach((add, i) => {
+    const checked = item.adicionais?.some(a => a.nome === add.nome) ? "checked" : "";
+    form.innerHTML += `
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="${i}" id="add-${i}" ${checked}>
+        <label class="form-check-label" for="add-${i}">
+          ${add.nome} (+R$ ${add.preco.toFixed(2).replace(".", ",")})
+        </label>
+      </div>`;
+  });
+
+  const modal = new bootstrap.Modal(document.getElementById("modalAdicionais"));
+  modal.show();
+}
+
+function salvarAdicionais() {
+  const checkboxes = document.querySelectorAll("#form-adicionais input:checked");
+  const novosAdicionais = Array.from(checkboxes).map(c => adicionaisDisponiveis[c.value]);
+
+  const item = carrinho[itemEditandoIndex];
+  if (typeof item.precoBase !== "number") {
+    const valorAtual = precoParaNumero(item.preco);
+    const valorAdicionaisAntigos = (item.adicionais || []).reduce((soma, a) => soma + a.preco, 0);
+    item.precoBase = valorAtual - valorAdicionaisAntigos;
+  }
+  item.adicionais = novosAdicionais;
+  const somaAdicionais = novosAdicionais.reduce((soma, a) => soma + a.preco, 0);
+  item.preco = `R$ ${(item.precoBase + somaAdicionais).toFixed(2).replace(".", ",")}`;
+
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  renderizarPedidos();
+  bootstrap.Modal.getInstance(document.getElementById("modalAdicionais")).hide();
+}
+
+function removerItem(index) {
+  carrinho.splice(index, 1);
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  renderizarPedidos();
+}
+
+function esvaziarCarrinho() {
+  localStorage.removeItem("carrinho");
+  location.reload();
+}
+
+function finalizarPedido() {
+  if (carrinho.length === 0) {
+    alert("Seu carrinho está vazio. Adicione itens antes de finalizar o pedido.");
+    return;
+  }
+  atualizarTaxaEntrega(false);
+  document.getElementById("formulario").style.display = "block";
+  document.getElementById("btnFinalizarPedido").scrollIntoView({ behavior: "smooth" });
+}
+
+function mostrarPagamento() {
+  const tipo = document.getElementById("pagamento").value;
+  document.getElementById("troco").style.display = tipo === "dinheiro" ? "block" : "none";
+  document.getElementById("cartao").style.display = tipo === "cartao" ? "block" : "none";
+}
+
+document.getElementById("form-pedido").onsubmit = function (e) {
+  e.preventDefault();
+  const dados = Object.fromEntries(new FormData(this).entries());
+  let msg = "🛍️ *Pedido Mekponey*%0A%0A";
+  let total = 0;
+
+  carrinho.forEach((item, i) => {
+    msg += `🟢 *Item ${i + 1}*%0A`;
+    for (const chave in item) {
+      let valor = item[chave];
+      if (typeof valor === "object") valor = JSON.stringify(valor);
+      msg += `  ➤ ${chave}: ${valor}%0A`;
+    }
+    total += precoParaNumero(item.preco);
+    msg += "%0A";
+  });
+
+  const retirar = document.getElementById("retirarLocal").checked;
+  if (retirar) msg += `%0A🚶 Retirada na lanchonete`;
+  else {
+    msg += `%0A🚚 Taxa de entrega: R$ ${taxaEntrega.toFixed(2).replace(".", ",")}`;
+    total += taxaEntrega;
+  }
+
+  msg += `%0A%0A📦 *Dados para Entrega:*%0A`;
+  for (const chave in dados) {
+    msg += `🔹 ${chave}: ${dados[chave]}%0A`;
+  }
+
+  document.getElementById("resumoPedido").textContent = decodeURIComponent(msg.replace(/%0A/g, "\n"));
+  document.getElementById("destaquePix").style.display = dados.pagamento === "pix" ? "block" : "none";
+  document.getElementById("destaqueHorario").textContent = dados.horario ? "Melhor horário para entrega: " + dados.horario : "";
+  document.getElementById("totalPedido").textContent = `Total do Pedido: R$ ${total.toFixed(2).replace(".", ",")}`;
+
+  const modal = new bootstrap.Modal(document.getElementById("modalConfirmacao"));
+  modal.show();
+  window.mensagemWhatsApp = msg;
+}
+
+function enviarWhatsApp() {
+  const numero = "5514998326287"; 
+  const url = `https://wa.me/${numero}?text=${window.mensagemWhatsApp}`;
+  window.open(url, "_blank");
+  localStorage.removeItem("carrinho");
+}
+
+function confirmarComboEspecial() {
+  const texto = document.getElementById("detalhesCombo").value.trim();
+  if (!texto) { alert("Digite suas escolhas antes de confirmar!"); return; }
+  const ultimoIndex = carrinho.length - 1;
+  if (ultimoIndex < 0) return;
+  const item = carrinho[ultimoIndex];
+  item.detalhes = texto;
+
+  if (texto.toLowerCase().includes("coca")) item.bebida = "Coca-Cola 1L";
+  else if (texto.toLowerCase().includes("guaraná")) item.bebida = "Guaraná 1L";
+
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  renderizarPedidos();
+  bootstrap.Modal.getInstance(document.getElementById("modalComboEspecial")).hide();
+}
+
+document.getElementById("retirarLocal").checked = false;
+atualizarTaxaEntrega();
+renderizarPedidos();
+</script>
+</body>
+</html>

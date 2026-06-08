@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="icone.ico" type="image/x-icon">
+  <title>Menu Digital</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+      padding-bottom: 80px;
+    }
+    .navbar {
+      background-color: #8B0000;
+    }
+    .navbar-brand img {
+      height: 40px;
+    }
+    .navbar-title {
+      color: white;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+    .cart-icon-floating {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #8B0000;
+      color: white;
+      font-size: 1.8rem;
+      padding: 10px 14px;
+      border-radius: 50%;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1050;
+    }
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: yellow;
+      color: black;
+      font-weight: bold;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 0.8rem;
+    }
+    .card {
+      width: 300px;
+      height: 400px;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      margin: 10px;
+    }
+    .card img {
+      max-width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+    }
+    .rodape-aviso {
+      background-color: red;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 1040;
+    }
+  </style>
+</head>
+<body onload="inicializarPagina()">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container d-flex justify-content-between align-items-center">
+      <a class="navbar-brand" href="#"><img src="logo.png" alt="Logo"></a>
+      <div class="navbar-title">Mekponey Cardápio Digital</div>
+    </div>
+  </nav>
+  <div id="promoCarousel" class="carousel slide mt-3" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active text-center">
+      <img src="01.jpeg" class="d-block mx-auto w-75" alt="Combo Especial do Dia">
+      <div class="mt-2">
+        <h5>COMBO ESPECIAL DO DIA</h5>
+      </div>
+    </div>
+    <div class="carousel-item text-center">
+      <img src="02.jpeg" class="d-block mx-auto w-75" alt="Combo para Dois">
+      <div class="mt-2">
+        <h5>COMBO PRA 2</h5>
+      </div>
+    </div>
+     <div class="carousel-item text-center">
+      <img src="03.png" class="d-block mx-auto w-75" alt="ATENÇÃO">
+      <div class="mt-2">
+        <h5>ATENÇÃO</h5>
+      </div>
+      </div>
+     <div class="carousel-item text-center">
+      <img src="04.png" class="d-block mx-auto w-75" alt="ATENÇÃO">
+      <div class="mt-2">
+        <h5>MEK PONEY MATA SUA FOME</h5>
+      </div>
+  </div>
+   <div class="carousel-item text-center">
+      <img src="05.jpeg" class="d-block mx-auto w-75" alt="ATENÇÃO">
+      <div class="mt-2">
+        <h5>PROMOÇÕES</h5>
+      </div>
+  </div>
+   <div class="carousel-item text-center">
+      <img src="06.jpeg" class="d-block mx-auto w-75" alt="ATENÇÃO">
+      <div class="mt-2">
+        <h5>PROMOÇÕES</h5>
+      </div>
+  </div>
+   <div class="carousel-item text-center">
+      <img src="07.jpeg" class="d-block mx-auto w-75" alt="ATENÇÃO">
+      <div class="mt-2">
+        <h5>PROMOÇÕES</h5>
+      </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+    <span class="visually-hidden">Anterior</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+    <span class="visually-hidden">Próximo</span>
+  </button>
+</div>
+
+
+  <div class="container mt-4">
+    <ul class="nav nav-tabs" id="menuTabs">
+      <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#frango">Burgers de Frango</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#premium">Burgers Gourmet</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#classicos">Burgers Clássicos</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#porcoes">Porções</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#bebidas">Bebidas</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#Especiais">Especiais do Dia - 26,90</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#combododia">Combo do Dia - 30,90</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#combos">Combos - 34,90</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#combosespeciais">Combos Especiais</a></li>
+      <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#duploburg">Duplo Burguer - 19,90</a></li>
+    </ul>
+    <div class="tab-content mt-3" id="tab-content">
+      <div class="tab-pane fade show active" id="frango"></div>
+      <div class="tab-pane fade" id="premium"></div>
+      <div class="tab-pane fade" id="classicos"></div>
+      <div class="tab-pane fade" id="porcoes"></div>
+      <div class="tab-pane fade" id="bebidas"></div>
+      <div class="tab-pane fade" id="Especiais"></div>
+      <div class="tab-pane fade" id="combododia"></div>
+      <div class="tab-pane fade" id="combos"></div>
+      <div class="tab-pane fade" id="combosespeciais"></div>
+      <div class="tab-pane fade" id="duploburg"></div>
+    </div>
+  </div>
+
+  <a href="pedido.html" class="cart-icon-floating">
+    <i class="bi bi-cart-fill position-relative">
+      <span class="cart-count" id="cart-count">0</span>
+    </i>
+  </a>
+  <!-- Modal -->
+<div class="modal fade" id="pedidoModal" tabindex="-1" aria-labelledby="pedidoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pedidoModalLabel">Detalhes do Pedido</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <p id="produtoNome"></p>
+        <p id="produtoPreco"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" onclick="confirmarPedido()">Confirmar Pedido</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="rodape-aviso">
+    Este pedido deve ser enviado ao WhatsApp através do botão CONFIRMAR
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  const cardapio = { frango: [
+  { nome: "MP Chicken Salada Bacon", ingredientes: "Hamb de Frango, Queijo, Alface, Tomate, Bacon, Maionese Especial", preco: "R$ 21,90", combo: "R$ 36,90", imagem: "frango1.jpg" },
+  { nome: "MP Chicken Tártaro", ingredientes: "Hamb de Frango, Queijo, Molho Tártaro, Bacon", preco: "R$ 20,90", combo: "R$ 35,90", imagem: "frango2.jpg" },
+  { nome: "MP Chicken Cheddar", ingredientes: "Hamb de Frango, Cheddar, Bacon", preco: "R$ 18,90", combo: "R$ 33,90", imagem: "frango3.jpg" },
+  { nome: "MP Mix", ingredientes: "Hamb de Frango, Alface, Hamb de Carne, Alface, Tomate, Maionese Especial", preco: "R$ 19,90", combo: "R$ 34,90", imagem: "frango4.jpg" },
+  { nome: "MP Chicken BBQ", ingredientes: "Hamb Frango, Molho Barbecue, Bacon", preco: "R$ 18,90", combo: "R$ 33,90", imagem: "frango5.jpg" },
+  { nome: "MP Chicken Duplo", ingredientes: "Dois Hamb de Frango, Queijo, Alface, Tomate, Maionese Especial", preco: "R$ 21,90", combo: "R$ 36,90", imagem: "frango6.jpg" },
+  { nome: "MP Chicken Caipira", ingredientes: "Hamb de Frango, Queijo, Bacon, Ovo, Maionese, Milho", preco: "R$ 20,90", combo: "R$ 35,90", imagem: "frango7.jpg" },
+
+],
+
+      premium: [
+  { nome: "Angus Bacon", ingredientes: "Hambúrger de Angus 200g, Maionese, Bacon, Queijo", preco: "R$ 26,90", combo: "R$ 41,90", imagem: "premium1.jpg" },
+  { nome: "Angus Barbecue", ingredientes: "Hambúrger de Angus 200g, Barbecue, Bacon, Queijo, Cebola Shoyu", preco: "R$ 26,90", combo: "R$ 41,90", imagem: "premium2.jpg" },
+  { nome: "Angus Salada Egg", ingredientes: "Hambúrger de Angus 200g, Salada, Ovo, Maionese Especial", preco: "R$ 27,90", combo: "R$ 42,90", imagem: "premium3.jpg" },
+  { nome: "Duplo Picanha", ingredientes: "02 Hambúrger de Picanha 200g, Queijo, Maionese Especial", preco: "R$ 31,90", combo: "R$ 46,90", imagem: "premium4.jpg" },
+  { nome: "Picanha Cheddar Bacon", ingredientes: "Hambúrger de Picanha 200g, Cheddar, Bacon, Cebola Shoyu", preco: "R$ 26,90", combo: "R$ 41,90", imagem: "premium5.jpg" },
+  { nome: "Picanha Salada", ingredientes: "Hambúrger de Picanha 200g, Alface, Tomate, Queijo, Picles", preco: "R$ 26,90", combo: "R$ 41,90", imagem: "premium6.jpg" },
+  { nome: "Duplo Picanha Salada", ingredientes: "02 Hambúrgeres de Picanha 200g, Alface, Tomate, Molho Especial, Queijo, Picles", preco: "R$ 33,90", combo: "R$ 48,90", imagem: "premium7.jpg" },
+  { nome: "Picanha Cream Cheese", ingredientes: "Hambúrger de Picanha 200g, Alface, Tomate, Cream Cheese, Queijo, Picles, Bacon", preco: "R$ 27,90", combo: "R$ 42,90", imagem: "premium8.jpg" },
+  { nome: "Picanha Salada Bacon", ingredientes: "Hambúrger Picanha 200g, Bacon, Alface, Tomate, Queijo, Picles", preco: "R$ 28,90", combo: "R$ 43,90", imagem: "premium9.jpg" },
+  { nome: "Angus Cremoso", ingredientes: "Hambúrger de Angus 200g, Catupiry Original, Cebola, Tomate, Bacon Crocante", preco: "R$ 26,90", combo: "R$ 41,90", imagem: "premium9.jpg" },
+  { nome: "Picanha Quatro Queijos", ingredientes: "Hambúrger Picanha 200g, Bacon, Molho Quatro Queijos", preco: "R$ 27,90", combo: "R$ 42,90", imagem: "premium9.jpg" },
+  
+],
+classicos: [
+  { nome: "Big Bacon", ingredientes: "4 Hambúrgueres, Queijo, Bacon, Molho Especial", preco: "R$ 22,90", combo: "R$ 37,90", imagem: "classico1.jpg" },
+  { nome: "Barbebacon", ingredientes: "2 Hambúrgueres, Queijo, Bacon, Molho Barbecue", preco: "R$ 21,90", combo: "R$ 36,90", imagem: "classico2.jpg" },
+  { nome: "Big Egg", ingredientes: "Hambúrguer, Queijo, Ovo, Picles,Cebola, Molho Especial", preco: "R$ 20,90", combo: "R$ 35,90", imagem: "classico3.jpg" },
+  { nome: "Big Cheddar Bacon", ingredientes: "2 Hambúrgueres, Queijo Cheddar, Bacon", preco: "R$ 20,90", combo: "R$ 35,90", imagem: "classico3.jpg" },
+  { nome: "Big Salada", ingredientes: "Hambúrguer, Queijo, Alface, Tomate, Picles, Molho Especial", preco: "R$ 20,90", combo: "R$ 35,90", imagem: "classico4.jpg" },
+  { nome: "Big Salada Egg", ingredientes: "hambúrguer, queijo,alface, tomate, ovo,Maionese", preco: "R$ 22,90", combo: "R$ 37,90", imagem: "classico5.jpg" },
+  { nome: "MP Kids", ingredientes: "Hambúrguer, Queijo, Molho Especial, Alface, Tomate", preco: "R$ 9,90", combo: "R$ 28,90", imagem: "classico6.jpg" },
+  { nome: "MEK Turbo", ingredientes: "Hambúrguer, ovo, Bacon, Anel de cebola, muito Queijo e maionese especial", preco: "R$ 29,90", combo: "R$ 44,90", imagem: "classico6.jpg" },
+  { nome: "Duplo Duplo Salada", ingredientes: "04 Hambúrgueres, Alface, Tomate, Queijo, Picles, Molho Especial", preco: "R$ 19,90", combo: "R$ 34,90", imagem: "classico8.jpg" },
+  { nome: "Duplo Barbecue Bacon", ingredientes: "02 Hambúrgueres, Queijo, Bacon, Barbecue", preco: "R$ 19,90", combo: "R$ 34,90", imagem: "classico9.jpg" },
+  { nome: "Duplo Burguer", ingredientes: "02 Hambúrgueres, Queijo, Maionese, Ketchup", preco: "R$ 11,00", combo: "R$ 26,00", imagem: "classico10.jpg" },
+  { nome: "Double Bacon", ingredientes: "Hambúrguer em Dobro, Molho em Dobro, Bacon em Dobro, Queijo em Dobro", preco: "R$ 19,90", combo: "R$ 34,90", imagem: "classico10.jpg" },
+  { nome: "Texas Burguer", ingredientes: "02 Hambúrgueres, Anéis de Cebola, Queijo, Barbecue, Maionese de Bacon", preco: "R$ 19,90", combo: "R$ 34,90", imagem: "classico11.jpg" },
+  { nome: "Texas Salada", ingredientes: "02 Hambúrgueres, Anéis de Cebola, Queijo, Alface, Tomate, Bacon, Picles, Maionese", preco: "R$ 19,90", combo: "R$ 34,90", imagem: "classico12.jpg" },
+  
+],
+
+      porcoes: [
+  { nome: "Batata Individual", ingredientes: "", preco: "R$ 12,00", imagem: "porcao1.jpg" },
+  { nome: "Batata Individual c/ cheddar e bacon", ingredientes: "", preco: "R$ 15,00", imagem: "porcao2.jpg" },
+  { nome: "Batata Grande", ingredientes: "", preco: "R$ 30,00", imagem: "porcao3.jpg" },
+  { nome: "Batata Cheddar e Bacon", ingredientes: "", preco: "R$ 40,00", imagem: "porcao4.jpg" },
+  { nome: "Batata Quatro Queijos", ingredientes: "", preco: "R$ 43,00", imagem: "porcao5.jpg" },
+  { nome: "Batata Quatro Queijos Individual", ingredientes: "", preco: "R$ 18,00", imagem: "porcao6.jpg" },
+  
+],
+
+      bebidas: [
+  { nome: "Coca 2 Litros", ingredientes: "Refrigerante PET 2 litros", preco: "R$ 15,00", combo: "-", imagem: "bebida1.png" },
+  { nome: "Guaraná 2 Litros", ingredientes: "Refrigerante PET 2 litros", preco: "R$ 10,00", combo: "-", imagem: "bebida2.jpg" },
+  { nome: "Refrigerante Lata", ingredientes: "", preco: "R$ 6,00", combo: "-", imagem: "bebida3.jpg" },
+  { nome: "Coca 600ml", ingredientes: "", preco: "R$ 8,00", combo: "-", imagem: "bebida5.jpg" },
+  { nome: "Coca 1 Litro", ingredientes: "Refrigerantte PET 1 litro", preco: "R$ 10,00", combo: "-", imagem: "bebida6.jpg" },
+  { nome: "Guaraná 1 Litro", ingredientes: "Refrigerantte PET 1 litro", preco: "R$ 8,00", combo: "-", imagem: "bebida7.jpg" },
+  { nome: "Suco 500ml", ingredientes: "Abacaxi, Abacaxi c/ Hortelã, Manga, Morango, Maracujá * colocar sabor na obs", preco: "R$ 9,90", combo: "-", imagem: "bebida8.jpg" },
+  { nome: "Suco 1 Litro", ingredientes: "Abacaxi, Abacaxi c/ Hortelã, Manga, Morango, Maracujá * colocar sabor na obs", preco: "R$ 16,00", combo: "-", imagem: "bebida9.jpg" },
+],
+Especiais: [
+  { nome: "Especial Segunda - Feira", ingredientes: "2 Mp Burger Triplo, 2 Chicken Salada", preco: "R$ 26,90", imagem: "especial1.jpg" },
+  { nome: "Especial Terça - Feira", ingredientes: "2 Mp Barbecue, 2 Chicken Salada", preco: "R$ 26,90",  imagem: "especial2.jpg" },
+  { nome: "Especial Quarta - Feira", ingredientes: "2 Duplo Salada, 2 Chicken Salada", preco: "R$ 26,90",  imagem: "especial3.jpg" },
+  { nome: "Especial Quinta - Feira", ingredientes: "2 Mp Cheddar e Bacon, 2 Chicken Salada", preco: "R$ 26,90",  imagem: "especial4.jpg" },
+  { nome: "Especial Sexta - Feira", ingredientes: "2 Mp Bacon, 2 Chicken Salada", preco: "R$ 26,90",  imagem: "especial5.jpg" },
+  { nome: "Especial Sábado", ingredientes: " 2 Mp Barbecue, 2 Duplo Salada", preco: "R$ 26,90", imagem: "especial5.jpg" },
+],
+combododia: [
+  { nome: "Combo do dia Segunda - Feira", ingredientes: "Triplo Burger", preco: "R$ 30,90", imagem: "segunda.jpeg" },
+  { nome: "Combo do dia Terça - Feira", ingredientes: "Duplo Bbq", preco: "R$ 30,90", imagem: "terca.jpeg" },
+  { nome: "Combo do dia Quarta - Feira", ingredientes: "Duplo Salada", preco: "R$ 30,90", imagem: "quarta.jpeg" },
+  { nome: "Combo do dia Quinta - Feira", ingredientes: "Duplo Cheddar e Bacon", preco: "R$ 30,90", imagem: "quinta.jpeg" },
+  { nome: "Combo do dia Sexta - Feira", ingredientes: "Duplo Bacon", preco: "R$ 30,90",  imagem: "sexta.jpeg" },
+  
+],
+
+combosespeciais: [
+  { nome: "Combo Especial", ingredientes: "03 ESpeciais do dia, 01 porção de nuggets, 01 Batata com cheddar e Bacon Individual", preco: "R$ 64,90", imagem: "01.jpeg" },
+  { nome: "Combo pra dois", ingredientes: "02 Especiais do dia, Batata Individual, 10 Nuggets, 01 Coca ou Guaraná 1 Lt", preco: "R$ 59,90", imagem: "02.jpeg" },
+  
+],
+combos: [
+  { nome: "2 Duplo Chicken Salada", ingredientes: "02 duplo Chicken salada", preco: "R$ 34,90", imagem: "07.jpeg" },
+  { nome: "2 Duplo barbecue Bacon", ingredientes: "02 duplo barbecue bacon", preco: "R$ 34,90", imagem: "07.jpeg" },
+  { nome: "1 Duplo chicken Salada e 1 Duplo Barbecue Bacon", ingredientes: "1 de cada", preco: "R$ 34,90", imagem: "07.jpeg" },
+  { nome: "MP Duplo Duplo Salada", ingredientes: "02 MP Duplo Duplo Salada", preco: "R$ 34,90", imagem: "06.jpeg" },
+  
+],
+duploburg: [
+  { nome: "2 Duplo Burger", ingredientes: "Dois Hamb, Queijo, Maionese e Ketchup", preco: "R$ 19,90", imagem: "05.jpeg" },
+  
+  
+],
+
+
+    };
+ 
+
+  const adicionaisDisponiveis = [
+    { nome: "Bacon", valor: 5.00 },
+    { nome: "Cheddar", valor: 5.00 },
+    { nome: "Anéis de Cebola", valor: 5.00 },
+    { nome: "Catupiry Original", valor: 5.00 },
+    { nome: "Mussarela", valor: 5.00 },
+    { nome: "Cream Cheese", valor: 5.00 },
+    { nome: "Hamburger 90 g", valor: 5.00 },
+    { nome: "Hamburger de Picanha", valor: 7.00 },
+    { nome: "Hamburger de Angus", valor: 7.00 }
+    
+  ];
+
+
+
+  let produtoSelecionado = "";
+  let categoriaSelecionada = "";
+
+  
+
+function inicializarPagina() {
+  const hoje = new Date().getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
+
+  for (let categoria in cardapio) {
+    if (categoria === "Especiais" || categoria === "combododia") {
+      gerarCardDoDia(categoria, hoje);
+    } else {
+      gerarCardsPersonalizados(categoria);
+    }
+  }
+  atualizarContadorCarrinho();
+}
+
+function gerarCardDoDia(categoria, hoje) {
+  const container = document.getElementById(categoria);
+  container.innerHTML = ""; // limpa antes de renderizar
+
+  let indice = null;
+  if (categoria === "Especiais") {
+    // Segunda=1 → índice 0, Terça=2 → índice 1, ... Sábado=6 → índice 5
+    if (hoje >= 1 && hoje <= 6) indice = hoje - 1;
+  } else if (categoria === "combododia") {
+    // Segunda=1 → índice 0, Terça=2 → índice 1, ... Sexta=5 → índice 4
+    if (hoje >= 1 && hoje <= 5) indice = hoje - 1;
+  }
+
+  if (indice !== null && cardapio[categoria][indice]) {
+    const item = cardapio[categoria][indice];
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${item.imagem}" alt="${item.nome}">
+      <div class="card-body">
+        <h5 class="card-title">${item.nome}</h5>
+        <p class="card-text">${item.ingredientes}</p>
+        <p class="card-text">${item.combo && item.combo !== "-" ? `<strong>Unit:</strong> ${item.preco} | <strong>Combo:</strong> ${item.combo}` : `<strong>Preço:</strong> ${item.preco}`}</p>
+        <button class="btn btn-success" onclick='adicionarAoCarrinho("${item.nome}", "${categoria}")'>Pedir</button>
+      </div>`;
+    container.appendChild(card);
+  } else {
+    container.innerHTML = `<p class="text-center fw-bold">Não há ${categoria} disponível hoje.</p>`;
+  }
+}
+
+
+function gerarCardsPersonalizados(categoria) {
+  const container = document.getElementById(categoria);
+  cardapio[categoria].forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${item.imagem}" alt="${item.nome}">
+      <div class="card-body">
+        <h5 class="card-title">${item.nome}</h5>
+        <p class="card-text">${item.ingredientes}</p>
+        <p class="card-text">${item.combo && item.combo !== "-" ? `<strong>Unit:</strong> ${item.preco} | <strong>Combo:</strong> ${item.combo}` : `<strong>Preço:</strong> ${item.preco}`}</p>
+        <button class="btn btn-success" onclick='adicionarAoCarrinho("${item.nome}", "${categoria}")'>Pedir</button>
+      </div>`;
+    container.appendChild(card);
+  });
+}
+
+function adicionarAoCarrinho(produto, categoria) {
+  produtoSelecionado = produto;
+  categoriaSelecionada = categoria;
+
+  const texto = document.getElementById("textoProduto");
+  const opcoes = document.getElementById("opcoesPedido");
+
+  texto.textContent = `Escolha o tipo de ${produto}`;
+  opcoes.innerHTML = "";
+
+  if (categoria === "Especiais") {
+    opcoes.innerHTML = `
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="tipoPedido" id="iguais" value="Dois Iguais" checked>
+        <label class="form-check-label" for="iguais">Dois Iguais</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="tipoPedido" id="umdecada" value="Um de Cada">
+        <label class="form-check-label" for="umdecada">Um de Cada</label>
+      </div>
+      <div id="opcoesDoisIguais" style="margin-top:10px;"></div>
+      <hr>
+      <p class="fw-bold">Adicionais :</p>
+    `;
+
+    // gera lista de adicionais
+    adicionaisDisponiveis.forEach((adc, index) => {
+      opcoes.innerHTML += `
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="${adc.nome}" id="adc${index}">
+          <label class="form-check-label" for="adc${index}">
+            ${adc.nome} (+R$ ${adc.valor.toFixed(2)})
+          </label>
+        </div>`;
+    });
+
+    // quando clicar em "Dois Iguais", mostrar os ingredientes como opções
+    document.getElementById("iguais").addEventListener("change", () => {
+      const produtoObj = cardapio[categoria].find(item => item.nome === produtoSelecionado);
+      if (produtoObj) {
+        const ingrArray = produtoObj.ingredientes.split(",");
+        let radiosHtml = `<p class="fw-bold mt-2">Escolha qual será o "igual":</p>`;
+        ingrArray.forEach((ing, i) => {
+          radiosHtml += `
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="opcaoIgual" id="opcao${i}" value="${ing.trim()}" ${i===0?"checked":""}>
+              <label class="form-check-label" for="opcao${i}">${ing.trim()}</label>
+            </div>`;
+        });
+        document.getElementById("opcoesDoisIguais").innerHTML = radiosHtml;
+      }
+    });
+
+    // se entrar já marcado "Dois Iguais", dispara logo
+    document.getElementById("iguais").dispatchEvent(new Event("change"));
+
+ } else if (categoria === "porcoes" || categoria === "bebidas" || categoria === "combododia"|| categoria === "combos"|| categoria === "duploburg") {
+    confirmarPedido("Unico");
+    return;
+} else if (categoria === "combosespeciais") {
+    produtoSelecionado = produto;
+    categoriaSelecionada = categoria;
+
+    const modalBody = `
+      <p class="fw-bold">Disponíveis para este combo: Duplo salada, Duplo barbecue, Duplo cheddar bacon, Duplo bacon e Chicken salada.
+      Combo especial -3 lanches. Combo pra 2 -2 lanches. digite abaixo sua escolha!</p>
+      <textarea id="inputLanches" class="form-control mb-2" rows="3" placeholder="Digite aqui os lanches que deseja"></textarea>
+    `;
+
+    let bebidaHtml = "";
+    if (produto.toLowerCase().includes("pra dois")) {
+      bebidaHtml = `
+        <p class="fw-bold">Escolha 1 bebida (Coca Cola 1L ou Guaraná 1L):</p>
+        <select id="inputBebida" class="form-select mb-2">
+          <option value="">Selecione...</option>
+          <option value="Coca Cola 1L">Coca Cola 1L</option>
+          <option value="Guaraná 1L">Guaraná 1L</option>
+        </select>
+      `;
+    }
+
+    document.getElementById("textoProduto").textContent = produto;
+    document.getElementById("opcoesPedido").innerHTML = modalBody + bebidaHtml;
+
+    const modalConfirmBtn = document.querySelector("#modalEscolha .btn-danger");
+    modalConfirmBtn.onclick = function() {
+      const lanches = document.getElementById("inputLanches").value.trim();
+      let bebidaEscolhida = "";
+      if (produto.toLowerCase().includes("pra dois")) {
+        bebidaEscolhida = document.getElementById("inputBebida").value;
+      }
+
+      if (!lanches) {
+        alert("Por favor, digite os lanches que deseja.");
+        return;
+      }
+
+      // Pegando preço direto do cardápio, se existir
+      let precoStr = "R$ 0,00";
+      for (const cat in cardapio) {
+        const item = cardapio[cat].find(p => p.nome === produtoSelecionado);
+        if (item) {
+          precoStr = item.preco || "R$ 0,00";
+          break;
+        }
+      }
+
+      let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+      carrinho.push({
+        nome: produtoSelecionado,
+        tipo: "Combo Especial",
+        preco: precoStr,
+        adicionais: [],
+        bebida: bebidaEscolhida,
+        lanchesEscolhidos: lanches
+      });
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+      atualizarContadorCarrinho();
+      bootstrap.Modal.getInstance(document.getElementById('modalEscolha')).hide();
+      alert(`Combo adicionado ao carrinho!\nLanches: ${lanches}\nBebida: ${bebidaEscolhida || "Nenhuma"}`);
+    };
+
+    new bootstrap.Modal(document.getElementById('modalEscolha')).show();
+    return;
+
+
+
+  } else {
+    opcoes.innerHTML = `
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="tipoPedido" id="unitario" value="Unitário" checked>
+        <label class="form-check-label" for="unitario">Unitário</label>
+      </div>
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="tipoPedido" id="combo" value="Combo">
+        <label class="form-check-label" for="combo">Combo</label>
+      </div>`;
+
+    let htmlAdicionais = `<hr><p class="fw-bold">Adicionais (R$ 2,00 cada):</p>`;
+    adicionaisDisponiveis.forEach((adc, index) => {
+      htmlAdicionais += `
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="${adc.nome}" id="adc${index}">
+          <label class="form-check-label" for="adc${index}">
+            ${adc.nome} (+R$ ${adc.valor.toFixed(2)})
+          </label>
+        </div>`;
+    });
+    opcoes.innerHTML += htmlAdicionais;
+
+    const bebidasCombo = [
+      { nome: "Guaraná Lata", preco: 0.00 },
+      { nome: "Coca-Cola Lata", preco: 0.00 },
+      { nome: "Sprite Lata", preco: 0.00 },
+      { nome: "Fanta Lata", preco: 0.00 }
+    ];
+
+    let htmlBebidas = `<div id="bebidaSection" style="display:none;">
+      <hr>
+      <p class="fw-bold">Escolha uma bebida para o combo:</p>`;
+
+    bebidasCombo.forEach((bebida, i) => {
+      htmlBebidas += `
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="bebidaCombo" id="bebida${i}" value="${bebida.nome}" data-preco="${bebida.preco}">
+          <label class="form-check-label" for="bebida${i}">${bebida.nome} (R$ ${bebida.preco.toFixed(2).replace('.', ',')})</label>
+        </div>`;
+    });
+    htmlBebidas += `</div>`;
+    opcoes.innerHTML += htmlBebidas;
+
+    // Remove event listeners antes para evitar múltiplos triggers
+    const comboRadio = document.getElementById("combo");
+    const unitarioRadio = document.getElementById("unitario");
+
+    // Função para mostrar/ocultar bebida
+    function toggleBebidaSection() {
+      const bebidaSection = document.getElementById("bebidaSection");
+      if (comboRadio.checked) {
+        bebidaSection.style.display = "block";
+      } else {
+        bebidaSection.style.display = "none";
+      }
+    }
+
+    // Remove listeners antes (caso existam)
+    comboRadio.onchange = null;
+    unitarioRadio.onchange = null;
+
+    comboRadio.addEventListener("change", toggleBebidaSection);
+    unitarioRadio.addEventListener("change", toggleBebidaSection);
+
+    // Inicializa visibilidade da bebida conforme o rádio selecionado
+    toggleBebidaSection();
+  }
+
+  // Exibe o modal
+  new bootstrap.Modal(document.getElementById('modalEscolha')).show();
+}
+
+function confirmarPedido(forcadoTipo = null) {
+  const tipo = forcadoTipo || document.querySelector('input[name="tipoPedido"]:checked')?.value || "Combo";
+  let produtoObj = null;
+
+  if (categoriaSelecionada === "Promocional") {
+    produtoObj = { nome: produtoSelecionado, preco: precoPromocional, combo: precoPromocional };
+  } else {
+    for (const categoria in cardapio) {
+      produtoObj = cardapio[categoria].find(item => item.nome === produtoSelecionado);
+      if (produtoObj) break;
+    }
+  }
+
+  if (!produtoObj) {
+    alert("Erro: produto não encontrado.");
+    return;
+  }
+
+  let precoBaseStr = (tipo === "Combo") ? produtoObj.combo : produtoObj.preco;
+  
+  // Corrigido: converter string para número, mesmo com vírgula e "R$"
+  let valorBase = 0;
+  if (typeof precoBaseStr === "string") {
+    valorBase = parseFloat(precoBaseStr.replace("R$", "").replace(/\./g, "").replace(",", ".").trim());
+  } else if (typeof precoBaseStr === "number") {
+    valorBase = precoBaseStr;
+  }
+  if (isNaN(valorBase)) valorBase = 0;
+
+  let adicionaisSelecionados = [];
+  let valorAdicionais = 0;
+  adicionaisDisponiveis.forEach((adc, index) => {
+    const checkbox = document.getElementById(`adc${index}`);
+    if (checkbox && checkbox.checked) {
+      adicionaisSelecionados.push({ nome: adc.nome, preco: adc.valor });
+      valorAdicionais += adc.valor;
+    }
+  });
+
+  let bebidaSelecionada = "";
+  if (tipo === "Combo") {
+    const bebidaRadio = document.querySelector('input[name="bebidaCombo"]:checked');
+    if (bebidaRadio) bebidaSelecionada = bebidaRadio.value;
+  }
+
+  // 🔥 ingrediente escolhido (Especiais + Dois Iguais)
+  let ingredienteEscolhido = "";
+  if (categoriaSelecionada === "Especiais" && tipo === "Dois Iguais") {
+    const ingrRadio = document.querySelector('input[name="opcaoIgual"]:checked');
+    if (ingrRadio) ingredienteEscolhido = ingrRadio.value;
+  }
+
+  const precoFinal = (valorBase + valorAdicionais).toFixed(2);
+  const precoFormatado = `R$ ${precoFinal.replace(".", ",")}`;
+
+  let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+  carrinho.push({
+    nome: produtoSelecionado,
+    tipo: tipo,
+    preco: precoFormatado,
+    adicionais: adicionaisSelecionados,
+    bebida: bebidaSelecionada,
+    ingredienteEscolhido: ingredienteEscolhido // ✅ salvo no carrinho
+  });
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+  function confirmarComboEspecial() {
+  const texto = document.getElementById("detalhesCombo").value.trim();
+  if (!texto) { alert("Digite suas escolhas antes de confirmar!"); return; }
+  const ultimoIndex = carrinho.length - 1;
+  if (ultimoIndex < 0) return;
+  const item = carrinho[ultimoIndex];
+  item.detalhes = texto;
+
+  // Detecção de bebida simples
+  if (texto.toLowerCase().includes("coca")) item.bebida = "Coca-Cola 1L";
+  else if (texto.toLowerCase().includes("guaraná")) item.bebida = "Guaraná 1L";
+
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+  // 🔹 Chave: renderizar novamente os pedidos para atualizar o card
+  renderizarPedidos(); 
+
+  bootstrap.Modal.getInstance(document.getElementById("modalComboEspecial")).hide();
+}
+
+
+  atualizarContadorCarrinho();
+
+  bootstrap.Modal.getInstance(document.getElementById('modalEscolha'))?.hide();
+
+  const nomesAdicionais = adicionaisSelecionados.map(a => a.nome).join(", ") || "Nenhum";
+  alert(
+    `${produtoSelecionado} (${tipo}) adicionado ao carrinho por ${precoFormatado}.\n` +
+    `Adicionais: ${nomesAdicionais}\n` +
+    `Bebida: ${bebidaSelecionada || "Nenhuma"}\n` +
+    (ingredienteEscolhido ? `Dois iguais: ${ingredienteEscolhido}` : "")
+  );
+}
+function confirmarComboEspecial() {
+  const texto = document.getElementById("detalhesCombo").value.trim();
+  if (!texto) { alert("Digite suas escolhas antes de confirmar!"); return; }
+  const ultimoIndex = carrinho.length - 1;
+  if (ultimoIndex < 0) return;
+  const item = carrinho[ultimoIndex];
+  item.detalhes = texto;
+
+  // Detecção de bebida simples
+  if (texto.toLowerCase().includes("coca")) item.bebida = "Coca-Cola 1L";
+  else if (texto.toLowerCase().includes("guaraná")) item.bebida = "Guaraná 1L";
+
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+  // 🔹 Chave: renderizar novamente os pedidos para atualizar o card
+  renderizarPedidos(); 
+
+  bootstrap.Modal.getInstance(document.getElementById("modalComboEspecial")).hide();
+}
+
+
+
+
+function atualizarContadorCarrinho() {
+  let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+  document.getElementById("cart-count").textContent = carrinho.length;
+}
+
+function adicionarComboPromocional(nome, preco) {
+  // Tenta encontrar no cardápio
+  let encontrado = null;
+  let categoriaEncontrada = "";
+
+  for (const categoria in cardapio) {
+    const item = cardapio[categoria].find(p => p.nome === nome);
+    if (item) {
+      encontrado = item;
+      categoriaEncontrada = categoria;
+      break;
+    }
+  }
+
+  if (encontrado) {
+    adicionarAoCarrinho(nome, categoriaEncontrada);
+    setTimeout(() => {
+      const comboRadio = document.getElementById("combo");
+      if (comboRadio) {
+        comboRadio.checked = true;
+        const event = new Event("change");
+        comboRadio.dispatchEvent(event);
+      }
+    }, 300);
+  } else {
+    // Produto não está no cardápio (ex: carrossel)
+    produtoSelecionado = nome;
+    categoriaSelecionada = "Promocional";
+    precoPromocional = preco; // <-- valor fixo será usado no confirmarPedido
+
+    const texto = document.getElementById("textoProduto");
+    const opcoes = document.getElementById("opcoesPedido");
+
+    texto.textContent = `Adicionais para ${nome}`;
+    opcoes.innerHTML = `<hr><p class="fw-bold">Adicionais (R$ 2,00 cada):</p>`;
+
+    adicionaisDisponiveis.forEach((adc, index) => {
+      opcoes.innerHTML += `
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="${adc.nome}" id="adc${index}">
+          <label class="form-check-label" for="adc${index}">
+            ${adc.nome} (+R$ ${adc.valor.toFixed(2)})
+          </label>
+        </div>`;
+    });
+
+    new bootstrap.Modal(document.getElementById('modalEscolha')).show();
+  }
+}
+
+
+// Modal genérico (se precisar)
+function abrirModal(nome, preco) {
+  document.getElementById('produtoNome').innerText = "Produto: " + nome;
+  document.getElementById('produtoPreco').innerText = "Preço: " + preco;
+
+  // Abre o modal (usando Bootstrap 5)
+  var pedidoModal = new bootstrap.Modal(document.getElementById('pedidoModal'));
+  pedidoModal.show();
+}
+
+function confirmarPedidoModal() {
+  alert("Pedido confirmado!");
+  var pedidoModal = bootstrap.Modal.getInstance(document.getElementById('pedidoModal'));
+  pedidoModal.hide();
+}
+
+</script>
+
+    
+
+  <div class="modal fade" id="modalEscolha" tabindex="-1" aria-labelledby="modalEscolhaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="modalEscolhaLabel">Escolha o tipo de pedido</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <p id="textoProduto" class="fw-bold mb-2"></p>
+          <div id="opcoesPedido"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" onclick="confirmarPedido()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
